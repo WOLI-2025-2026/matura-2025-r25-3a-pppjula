@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-
+#include <vector>
+#include <string>
 using namespace std;
 
 string z3_1_path_symbole_txt = "../zalaczniki-2025/symbole.txt";
@@ -39,7 +40,7 @@ void zadanie2_1()
     plik.close();
 
 }
-
+ 
 
 int main()
 {

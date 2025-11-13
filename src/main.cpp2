@@ -1,0 +1,67 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    ifstream plik("symbole.txt");   
+    ofstream wynik("wynik.txt");    
+
+    if (!plik.is_open()) {
+        cout << "Nie mozna otworzyc pliku symbole.txt" << endl;
+        return 1;
+    }
+
+    vector<string> tab;  // tu zapiszemy wszystkie linie z pliku
+    string linia;
+
+    
+    while (getline(plik, linia)) {
+        if (!linia.empty()) tab.push_back(linia);
+    }
+
+    int wiersze = tab.size();
+    if (wiersze == 0) {
+        wynik << "Plik jest pusty." << endl;
+        return 0;
+    }
+
+    int kolumny = tab[0].size();  // zakładamy, że wszystkie linie mają tę samą długość
+    vector<pair<int, int>> znalezione; // lista środków kwadratów
+
+    
+    for (int i = 0; i < wiersze - 2; i++) {       // -2 bo sprawdzamy 3 wiersze naraz
+        for (int j = 0; j < kolumny - 2; j++) {   // -2 bo sprawdzamy 3 kolumny naraz
+            char znak = tab[i][j];                // pierwszy znak w kwadracie
+            bool wszystkie_te_same = true;        // zakładamy, że wszystkie są takie same
+
+            
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    if (tab[i + x][j + y] != znak) {
+                        wszystkie_te_same = false;
+                        break;
+                    }
+                }
+                if (!wszystkie_te_same) break;
+            }
+
+           
+            if (wszystkie_te_same) {
+                int srodek_wiersz = i + 2;  // +2 bo środek jest o 1 niżej i o 1 dalej
+                int srodek_kolumna = j + 2;
+                znalezione.push_back({srodek_wiersz, srodek_kolumna});
+            }
+        }
+    }
+
+    
+    wynik << "Liczba kwadratow: " << znalezione.size() << "\n";
+    for (auto [wiersz, kolumna] : znalezione) {
+        wynik << "Wiersz: " << wiersz << ", kolumna: " << kolumna << "\n";
+    }
+
+    cout << "Zapisano wynik do pliku wynik.txt" << endl;
+    return 0;
+}
